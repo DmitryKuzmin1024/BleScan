@@ -12,6 +12,7 @@ import java.util.Set;
 
 /*package*/ class BleScanner {
 
+    public static final int DEFAULT_SCAN_TIME = 3000;
     private ScanCallback scanCallback;
     private BluetoothLeScanner scanner;
 
