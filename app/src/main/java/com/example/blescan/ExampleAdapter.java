@@ -71,8 +71,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
     @Override
     public ExampleViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.example_item, viewGroup, false);
-        ExampleViewHolder evh = new ExampleViewHolder(v, mListener);
-        return evh;
+        return new ExampleViewHolder(v, mListener);
     }
 
     @Override
@@ -82,8 +81,6 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
         ExampleViewHolder.mTextView1.setText(currentItem.getmText1());
         ExampleViewHolder.mTextView2.setText(currentItem.getmText2());
         ExampleViewHolder.mTextView3.setText(currentItem.getmText3());
-
-
     }
 
     @Override

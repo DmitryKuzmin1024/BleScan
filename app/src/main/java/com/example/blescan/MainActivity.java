@@ -20,9 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,7 +34,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Button startScanButton;
 
-    Set<String> scanResultList = new HashSet<>();
+//    Set<String> scanResultSet = new HashSet<>();
+    List<ScanResult> scanResultList = new ArrayList<>();
     ArrayList<ExampleItem> exampleList = new ArrayList<>();
 
     private BleScanner scanner;
@@ -77,35 +76,32 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        mAdapter.setOnItemClickListener(new ExampleAdapter.OnItemClickListener() {
+        mAdapter.setOnItemClickListener(position -> {
 
-            @Override
-            public void onItemClick(int position) {
+            exampleList.get(position);
 
-                exampleList.get(position);
-
-                textView3 = mRecyclerView.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.textview3);
+            textView3 = mRecyclerView.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.textview3);
 
 
-                mButton1 = mRecyclerView.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.button1);
-                mButton2 = mRecyclerView.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.button2);
+            mButton1 = mRecyclerView.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.button1);
+            mButton2 = mRecyclerView.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.button2);
 
-                linearLayout1 = mRecyclerView.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.linearLayout1);
+            linearLayout1 = mRecyclerView.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.linearLayout1);
 
 
 
 
 
 
-                mButton1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+            mButton1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
 
-                        bleClient.connect(String.valueOf(scanResultList.toArray()[position])
-                                .split(";")[1]
-                                .replace("Address: ","")
-                                .replaceAll(" ",""));
+                    bleClient.connect(String.valueOf(scanResultList.toArray()[position])
+                            .split(";")[1]
+                            .replace("Address: ","")
+                            .replaceAll(" ",""));
 
 
 //                        if (!isUSD) {
@@ -133,27 +129,26 @@ public class MainActivity extends AppCompatActivity {
 //                            }
 //                        }, 6000);
 
-                    }
-                });
-
-                mButton2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        bleClient.disconnect();
-                    }
-                });
-
-                if (textView3.getVisibility() == View.GONE) {
-                    textView3.setVisibility(View.VISIBLE);
-                  } else {
-                    textView3.setVisibility(View.GONE);
                 }
+            });
 
-                if (linearLayout1.getVisibility() == View.GONE) {
-                    linearLayout1.setVisibility(View.VISIBLE);
-                } else {
-                    linearLayout1.setVisibility(View.GONE);
+            mButton2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    bleClient.disconnect();
                 }
+            });
+
+            if (textView3.getVisibility() == View.GONE) {
+                textView3.setVisibility(View.VISIBLE);
+              } else {
+                textView3.setVisibility(View.GONE);
+            }
+
+            if (linearLayout1.getVisibility() == View.GONE) {
+                linearLayout1.setVisibility(View.VISIBLE);
+            } else {
+                linearLayout1.setVisibility(View.GONE);
             }
         });
 
@@ -303,22 +298,21 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private ScanCallback scanCallback = new ScanCallback() { //Скан калбек
+    private ScanCallback scanCallback = new ScanCallback() { //Скан колбек
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
+//            scanResultList.add()
             if (result.getDevice().getName()==null) {
-                scanResultList.add("No name device" + ";Address: " + result.getDevice().getAddress() + ";Device type: "+ result.getDevice().getType()+ ";Hash code: "+ result.getDevice().hashCode());// добавляю в лист
+                Log.i("Debag_", "Null");
+//                scanResultList.add("No name device" + ";Address: " + result.getDevice().getAddress() + ";Device type: "+ result.getDevice().getType()+ ";Hash code: "+ result.getDevice().hashCode());// добавляю в лист
             } else {
-                scanResultList.add("Name: " + result.getDevice().getName() + ";Address: " + result.getDevice().getAddress()+ ";Device type: " + result.getDevice().getType()+ ";Hash code: "+ result.getDevice().hashCode());
+                Log.i("Debag_", String.valueOf(result.getDevice().getName()));
+//                scanResultList.add("Name: " + result.getDevice().getName() + ";Address: " + result.getDevice().getAddress()+ ";Device type: " + result.getDevice().getType()+ ";Hash code: "+ result.getDevice().hashCode());
             }
 
             Log.i("SCANING", String.valueOf(scanResultList));
 
-            if (result.getDevice().getName()==null) {
-                Log.i("Debag_", "Null");
-            } else {
-                Log.i("Debag_", String.valueOf(result.getDevice().getName()));
-            }
+
         }
 
         @Override
