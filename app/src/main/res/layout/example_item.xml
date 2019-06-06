@@ -9,9 +9,9 @@
     android:layout_marginTop="6dp"
     android:layout_marginRight="6dp"
     android:clickable="true"
-    android:elevation="1dp"
     android:foreground="?android:attr/selectableItemBackground"
-    app:cardCornerRadius="8dp">
+    app:cardCornerRadius="8dp"
+    app:cardElevation="1dp">
 
     <!--android:layout_marginLeft="@dimen/mtrl_card_spacing"-->
     <!--android:layout_marginTop="@dimen/mtrl_card_spacing"-->
