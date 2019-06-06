@@ -8,13 +8,4 @@
                 android:valueType="floatType"/>
         </set>
     </item>
-    <item
-        android:state_pressed="false">
-        <set>
-            <objectAnimator android:propertyName="translationZ"
-                android:duration="100"
-                android:valueTo="2dp"
-                android:valueType="floatType"/>
-        </set>
-    </item>
 </selector>
