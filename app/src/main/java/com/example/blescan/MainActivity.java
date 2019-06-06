@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
             }
+
             scanResultList.add(result);
             mAdapter.notifyItemChanged(scanResultList.size() - 1);
 
@@ -103,10 +104,11 @@ public class MainActivity extends AppCompatActivity {
                     result.getTimestampNanos() / 1000000;
             Date rxDate = new Date(rxTimestampMillis);
             String sDate = new SimpleDateFormat("SSS").format(rxDate);
+//            "Scan: " + result.getDevice().getName() + " " + result.getDevice().getAddress() + " " + result.getRssi()
+//                    + "  " + result.getDevice().getBluetoothClass() + " " +
+//                    result.getDevice().getBluetoothClass().getDeviceClass() + " " +
 
-            Log.i("CNCT", "Scan: " + result.getDevice().getName() + " " + result.getDevice().getAddress() + " " + result.getRssi()
-                    + "  " + result.getDevice().getBluetoothClass() + " " +
-                    result.getDevice().getBluetoothClass().getDeviceClass() + " " + sDate);
+                    Log.i("CNCT", String.valueOf(result.getScanRecord()));
         }
 
         @Override
@@ -115,8 +117,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private void askForLocationPermissions() { // Запрос
-        // Should we show an explanation?
+    private void askForLocationPermissions() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)) {
             new androidx.appcompat.app.AlertDialog.Builder(this)
@@ -130,20 +131,11 @@ public class MainActivity extends AppCompatActivity {
                     })
                     .show();
 
-            // Show an expanation to the user *asynchronously* -- don't block
-            // this thread waiting for the user's response! After the user
-            // sees the explanation, try again to request the permission.
-
         } else {
 
-            // No explanation needed, we can request the permission.
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     MY_PERMISSIONS_REQUEST_READ_CONTACTS);
-
-            // MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION is an
-            // app-defined int constant. The callback method gets the
-            // result of the request.
         }
     }
 
@@ -151,20 +143,12 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) { //Когда уже получили.
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
-                // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    bleClient = new BleClient(getApplicationContext());
-                    // scanner.startScan();
                 } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
                 }
                 return;
             }
-
-            // other 'case' lines to check for other
-            // permissions this app might request.
         }
     }
 

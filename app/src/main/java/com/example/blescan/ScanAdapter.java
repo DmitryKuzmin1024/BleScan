@@ -1,5 +1,7 @@
 package com.example.blescan;
 
+import android.animation.AnimatorInflater;
+import android.animation.StateListAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.le.ScanResult;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -49,36 +52,38 @@ public class ScanAdapter extends RecyclerView.Adapter<ScanAdapter.ExampleViewHol
         TextView mCharText;
         TextView mTypeText;
         Button connectBtn;
+        Button charBtn;
+        Button clearBtn;
         LinearLayout infoLayout1;
-        //        MaterialCardView mCards;
-        TableLayout tablelayout;
+        CardView mCards;
 
         public ExampleViewHolder(View itemView, OnItemClickListener listener) {
 
             super(itemView);
 
             connectBtn = itemView.findViewById(R.id.button1);
+            charBtn = itemView.findViewById(R.id.CharBtn);
             mNameText = itemView.findViewById(R.id.nameTextView);
             mDbmView = itemView.findViewById(R.id.DbmView);
             mAddressText = itemView.findViewById(R.id.addressTextView);
             mCharText = itemView.findViewById(R.id.charTextView);
             mTypeText = itemView.findViewById(R.id.typeTextView);
             infoLayout1 = itemView.findViewById(R.id.infoLayout);
-//            mCards = itemView.findViewById(R.id.mCards);
-            tablelayout = itemView.findViewById(R.id.tablelayout);
+            mCards = itemView.findViewById(R.id.mCards);
+            clearBtn = itemView.findViewById(R.id.ClearBtn);
 
             BleStatusInterface bleStatusInterface = new BleStatusInterface() {
+
                 @Override
                 public void connectStatus(String s) {
                     if (s.contains(" ms")) {
                         Log.i("msms", s);
                     }
-                    if (s.equals("GATT_SUCCESS") || (s.equals("Disconnected"))) {
+                    if (s.equals("Connected") || (s.equals("Disconnected"))) {
                         ((MainActivity) context).runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 Toast.makeText(context, s, Toast.LENGTH_LONG).show();
-
                             }
                         });
                     }
@@ -86,25 +91,28 @@ public class ScanAdapter extends RecyclerView.Adapter<ScanAdapter.ExampleViewHol
                         ((MainActivity) context).runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                charBtn.setVisibility(View.VISIBLE);
                                 mCharText.setText(s.substring(0, s.length() - 1));
-                                mCharText.setVisibility(View.VISIBLE);
-
-//                                String[]sub = s.split("\n");
-//                                TableRow  tv[] = new TableRow[s.length()];
-//                                for (int i = 0; i < sub.length; i++) {
-//                                    tv[i] = new TableRow (context);
-//                                    tv[i].setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-//                                            ViewGroup.LayoutParams.WRAP_CONTENT));
-//                                    TextView textView = new TextView(context);
-//                                    textView.setText(sub[i]);
-//                                    tv[i].addView(textView);
-//                                    tablelayout.addView(tv[i]);
-//                                }
-
+                                    charBtn.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            mCharText.setVisibility(View.VISIBLE);
+                                            charBtn.setVisibility(View.GONE);
+                                            clearBtn.setVisibility(View.VISIBLE);
+                                        }
+                                    });
+                                clearBtn.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        mCharText.setVisibility(View.GONE);
+                                        charBtn.setVisibility(View.VISIBLE);
+                                        clearBtn.setVisibility(View.GONE);
+                                    }
+                                });
                             }
                         });
                     }
-                    if (s.equals("GATT_SUCCESS")) {
+                    if (s.equals("Connected")) {
                         ((MainActivity) context).runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -125,6 +133,8 @@ public class ScanAdapter extends RecyclerView.Adapter<ScanAdapter.ExampleViewHol
                                 isUSD = false;
                                 mCharText.setText("");
                                 mCharText.setVisibility(View.GONE);
+                                charBtn.setVisibility(View.GONE);
+                                clearBtn.setVisibility(View.GONE);
                             }
                         });
                     }
@@ -145,16 +155,16 @@ public class ScanAdapter extends RecyclerView.Adapter<ScanAdapter.ExampleViewHol
                 }
             });
 
-//            StateListAnimator stateListAnimator = AnimatorInflater
-//                    .loadStateListAnimator(context, R.drawable.animat);
-//            mCards.setStateListAnimator(stateListAnimator);
-//            mCards.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    v.setClickable(true);
-//
-//                }
-//            });
+            StateListAnimator stateListAnimator = AnimatorInflater
+                    .loadStateListAnimator(context, R.drawable.animat);
+            mCards.setStateListAnimator(stateListAnimator);
+            mCards.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    v.setClickable(true);
+
+                }
+            });
 
             itemView.setOnClickListener(v -> {
 
@@ -164,9 +174,9 @@ public class ScanAdapter extends RecyclerView.Adapter<ScanAdapter.ExampleViewHol
                             .setDuration(350)
                             .setInterpolator(new FastOutSlowInInterpolator())
                             .start();
-                    infoLayout1.setVisibility(View.VISIBLE);
+//                    infoLayout1.setVisibility(View.VISIBLE);
                 } else if (infoLayout1.getVisibility() == View.VISIBLE) {
-                    infoLayout1.setVisibility(View.GONE);
+//                    infoLayout1.setVisibility(View.GONE);
                     v.animate()
                             .translationZ(1)
                             .setDuration(350)
@@ -191,6 +201,7 @@ public class ScanAdapter extends RecyclerView.Adapter<ScanAdapter.ExampleViewHol
     @Override
     public void onBindViewHolder(@NonNull ExampleViewHolder holder, int i) {
         ScanResult result = scanSet.get(i);
+
         holder.mNameText.setText((result.getDevice().getName() == null) ? "NO NAME" : "Name " + result.getDevice().getName());
         holder.mDbmView.setText(String.valueOf(result.getRssi()) + " dBm");
         holder.mAddressText.setText("Adress " + result.getDevice().getAddress());

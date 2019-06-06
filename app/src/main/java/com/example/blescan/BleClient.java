@@ -75,10 +75,11 @@ public class BleClient {
                 if (status == BluetoothGatt.GATT_SUCCESS) {
                     gatt.discoverServices();
 
-                    bleStatusInterface.connectStatus("GATT_SUCCESS");
-                    Log.i("CNCT", "GATT_SUCCESS " + status);
+                    bleStatusInterface.connectStatus("Connected");
+                    Log.i("CNCT", "Connected " + status);
 
                 } else {
+
 
                     Log.i("CNCT", "Connected " + status);
 
