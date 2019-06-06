@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
 //                    + "  " + result.getDevice().getBluetoothClass() + " " +
 //                    result.getDevice().getBluetoothClass().getDeviceClass() + " " +
 
-                    Log.i("CNCT", String.valueOf(result.getScanRecord()));
+            Log.i("CNCT", String.valueOf(result.getScanRecord()));
         }
 
         @Override

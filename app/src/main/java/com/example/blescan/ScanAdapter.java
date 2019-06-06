@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -93,14 +92,14 @@ public class ScanAdapter extends RecyclerView.Adapter<ScanAdapter.ExampleViewHol
                             public void run() {
                                 charBtn.setVisibility(View.VISIBLE);
                                 mCharText.setText(s.substring(0, s.length() - 1));
-                                    charBtn.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            mCharText.setVisibility(View.VISIBLE);
-                                            charBtn.setVisibility(View.GONE);
-                                            clearBtn.setVisibility(View.VISIBLE);
-                                        }
-                                    });
+                                charBtn.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        mCharText.setVisibility(View.VISIBLE);
+                                        charBtn.setVisibility(View.GONE);
+                                        clearBtn.setVisibility(View.VISIBLE);
+                                    }
+                                });
                                 clearBtn.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
